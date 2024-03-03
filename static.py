@@ -38,11 +38,13 @@ Vb_lst = []
 Fx_lst = []
 Fy_lst = []
 Fz_lst = []
+data_list = list(range(0, 7))
+data_list1 = list(range(0, 10))
 
-for v in range(0, 30, 5):
-	for x in range(-100, 100, 10):
-		for y in range(-100, 100, 10):
-			for z in range(-100, 100, 10):
+for v in range(0, 30, 2):
+	for x in range(-200, 200, 20):
+		for y in range(-200, 200, 20):
+			for z in range(-200, 200, 20):
 				Vb_lst.append(v/10)
 				Fx_lst.append(x)
 				Fy_lst.append(y)
@@ -51,7 +53,6 @@ for v in range(0, 30, 5):
 
 
 in_array = list(range(0, 11))
-in_array_1 = [0]*11
 
 
 # массивы координат элементов
@@ -109,6 +110,9 @@ def static(VB, FX, FY, FZ):
 	Fy = FY
 	Fz = FZ
 
+
+
+
 	in_array[0] = el_count
 	in_array[1] = cable_len
 	in_array[2] = Ckt
@@ -121,19 +125,7 @@ def static(VB, FX, FY, FZ):
 	in_array[9] = Fy
 	in_array[10] = Fz
 
-	in_array_1[0] = el_count
-	in_array_1[1] = cable_len
-	in_array_1[2] = Ckt
-	in_array_1[3] = Ckn
-	in_array_1[4] = Dk
-	in_array_1[5] = ro
-	in_array_1[6] = Vb
-	in_array_1[7] = Gk
-	in_array_1[8] = Fx
-	in_array_1[9] = Fy
-	in_array_1[10] = Fz
-
-	# print(in_array_1)
+	print(in_array)
 
 	# начальные координаты
 	x_k[0] = 0
@@ -273,7 +265,44 @@ def visual():
 ''' **************************************************************** '''
 
 def saver(Vb, Fx, Fy, Fz, i):
+	x_k_n = x_k[1] - x_k[0]
+	y_k_n = y_k[1] - y_k[0]
+	z_k_n = z_k[1] - z_k[0]
+	if x_k_n == 0 and y_k_n == 0:
+		alpha1 = 0
+	else:
+		alpha1 = np.arcsin(y_k_n / math.sqrt((x_k_n ** 2) + (y_k_n ** 2))) * 180 / math.pi
 
+
+	if x_k_n == 0 and z_k_n == 0:
+		beta1 = 0
+	else:
+		beta1 = np.arcsin(x_k_n / math.sqrt((x_k_n ** 2) + (z_k_n ** 2))) * 180 / math.pi
+
+	x_k_k = x_k[len(x_k) - 1] - x_k[len(x_k) - 2]
+	y_k_k = y_k[len(x_k) - 1] - y_k[len(x_k) - 2]
+	z_k_k = z_k[len(x_k) - 1] - z_k[len(x_k) - 2]
+	if x_k_k == 0 and y_k_k == 0:
+		alpha2 = 0
+	else:
+		alpha2 = np.arcsin(y_k_k / math.sqrt((x_k_k ** 2) + (y_k_k ** 2))) * 180 / math.pi
+
+
+	if x_k_k == 0 and z_k_k == 0:
+		beta2 = 0
+	else:
+		beta2 = np.arcsin(x_k_k / math.sqrt((x_k_k ** 2) + (z_k_k ** 2))) * 180 / math.pi
+
+	data_list1[0] = (alpha1)
+	data_list1[1] = (beta1)
+	data_list1[2] = (alpha2)
+	data_list1[3] = (beta2)
+	data_list1[4] = (x_k[len(x_k) - 1])
+	data_list1[5] = (y_k[len(x_k) - 1])
+	data_list1[6] = (z_k[len(x_k) - 1])
+	data_list1[7] = Fx + 200
+	data_list1[8] = Fy + 200
+	data_list1[9] = Fz + 200
 
 
 	# np.save("output.npy", in_array_1)
@@ -281,10 +310,15 @@ def saver(Vb, Fx, Fy, Fz, i):
 
 	df = pd.DataFrame(x_k + y_k + z_k)
 	# df.to_csv("files/" + str(Vb) + "_" + str(Fx) + "_" + str(Fy) + "_" + str(Fz) + "_" + 'out.csv', index=False, header=False)
-	df.to_csv("files/" + str(i) + "_" + 'out.csv', index=False, header=False)
-	df = pd.DataFrame(in_array)
+	df.to_csv("F:/files_NN_new/" + str(i) + "_" + 'out.csv', index=False, header=False)
+
+	df = pd.DataFrame(data_list1)
 	# df.to_csv("files/" + str(Vb) + "_" + str(Fx) + "_" + str(Fy) + "_" + str(Fz) + "_" + 'in.csv', index=False, header=False)
-	df.to_csv("files/" + str(i) + "_" + 'in.csv', index=False, header=False)
+	df.to_csv("F:/files_NN_new/" + str(i) + "_" + 'in.csv', index=False, header=False)
+
+	# df = pd.DataFrame(in_array)
+	# df.to_csv("files/" + str(Vb) + "_" + str(Fx) + "_" + str(Fy) + "_" + str(Fz) + "_" + 'in.csv', index=False, header=False)
+	# df.to_csv("files/" + str(i) + "_" + 'old.csv', index=False, header=False)
 
 
 # для запуска из консоли
